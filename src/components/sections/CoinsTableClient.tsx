@@ -224,7 +224,8 @@ export default function CoinsTableClient({ initialCoins }: Props) {
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-1 p-1 rounded-lg bg-bg-card-light dark:bg-bg-card-dark border border-border-light dark:border-border-dark w-fit mb-5">
+      <div className="overflow-x-auto mb-5 pb-0.5">
+      <div className="flex gap-1 p-1 rounded-lg bg-bg-card-light dark:bg-bg-card-dark border border-border-light dark:border-border-dark w-fit">
         {FILTER_TABS.map((tab) => (
           <button
             key={tab.id}
@@ -240,6 +241,7 @@ export default function CoinsTableClient({ initialCoins }: Props) {
           </button>
         ))}
       </div>
+      </div>
 
       {/* Table */}
       <div className="rounded-xl border border-border-light dark:border-border-dark bg-bg-card-light dark:bg-bg-card-dark overflow-hidden">
@@ -249,7 +251,7 @@ export default function CoinsTableClient({ initialCoins }: Props) {
               <tr className="border-b border-border-light dark:border-border-dark">
                 {[
                   { label: "#",            cls: "w-12 text-left" },
-                  { label: "Coin",         cls: "text-left min-w-[160px]" },
+                  { label: "Coin",         cls: "text-left min-w-[130px]" },
                   { label: "Price",        cls: "text-right" },
                   { label: "1h %",         cls: "text-right hidden sm:table-cell" },
                   { label: "24h %",        cls: "text-right" },
@@ -338,7 +340,7 @@ export default function CoinsTableClient({ initialCoins }: Props) {
           <p className="text-sm text-text-secondary-light dark:text-text-secondary-dark">
             Showing {(page - 1) * PER_PAGE + 1}–{Math.min(page * PER_PAGE, filtered.length)} of {filtered.length}
           </p>
-          <div className="flex gap-1">
+          <div className="flex gap-1 items-center">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
@@ -346,6 +348,9 @@ export default function CoinsTableClient({ initialCoins }: Props) {
             >
               Prev
             </button>
+            <span className="px-3 py-1.5 text-sm text-text-secondary-light dark:text-text-secondary-dark sm:hidden">
+              {page} / {totalPages}
+            </span>
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
               const p = i + 1;
               return (
@@ -353,7 +358,7 @@ export default function CoinsTableClient({ initialCoins }: Props) {
                   key={p}
                   onClick={() => setPage(p)}
                   className={cn(
-                    "w-9 h-9 rounded-md text-sm font-bold transition-all",
+                    "w-9 h-9 rounded-md text-sm font-bold transition-all hidden sm:flex items-center justify-center",
                     page === p
                       ? "bg-accent-gold text-bg-dark"
                       : "border border-border-light dark:border-border-dark text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark"

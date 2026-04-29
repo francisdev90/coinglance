@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowLeftRight, ChevronDown, Calculator } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { getTopCoins, type CoinMarket } from "@/lib/api/coingecko";
+import { type CoinMarket } from "@/lib/api/coingecko";
 import { useCurrency, CURRENCY_META, type CurrencyCode } from "@/contexts/CurrencyContext";
 import { formatPrice } from "@/lib/format";
 import Header from "@/components/layout/Header";
@@ -93,13 +93,16 @@ export default function ConverterPage() {
   const [showToSearch, setShowToSearch] = useState(false);
 
   useEffect(() => {
-    getTopCoins(100, "usd", 60).then((data) => {
-      setCoins(data);
-      const btc = data.find((c) => c.id === "bitcoin");
-      const usdt = data.find((c) => c.id === "tether");
-      if (btc) setFromAsset({ type: "crypto", coinId: btc.id, name: btc.name, symbol: btc.symbol.toUpperCase(), image: btc.image, priceUsd: btc.current_price });
-      if (usdt) setToAsset({ type: "crypto", coinId: usdt.id, name: usdt.name, symbol: usdt.symbol.toUpperCase(), image: usdt.image, priceUsd: usdt.current_price });
-    }).finally(() => setLoading(false));
+    fetch("/api/coins?currency=usd")
+      .then((r) => r.json())
+      .then((data: CoinMarket[]) => {
+        setCoins(data);
+        const btc = data.find((c) => c.id === "bitcoin");
+        const usdt = data.find((c) => c.id === "tether");
+        if (btc) setFromAsset({ type: "crypto", coinId: btc.id, name: btc.name, symbol: btc.symbol.toUpperCase(), image: btc.image, priceUsd: btc.current_price });
+        if (usdt) setToAsset({ type: "crypto", coinId: usdt.id, name: usdt.name, symbol: usdt.symbol.toUpperCase(), image: usdt.image, priceUsd: usdt.current_price });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const selectCoin = useCallback((c: CoinMarket, side: "from" | "to") => {
@@ -188,7 +191,7 @@ export default function ConverterPage() {
                   type="number"
                   value={fromAmount}
                   onChange={(e) => setFromAmount(e.target.value)}
-                  className="w-36 px-3 py-3 rounded-lg border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark text-sm font-mono font-bold text-text-primary-light dark:text-text-primary-dark outline-none focus:border-accent-gold/60 transition-colors text-right"
+                  className="w-28 sm:w-36 px-3 py-3 rounded-lg border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark text-sm font-mono font-bold text-text-primary-light dark:text-text-primary-dark outline-none focus:border-accent-gold/60 transition-colors text-right"
                   placeholder="0"
                   min={0}
                 />
@@ -249,7 +252,7 @@ export default function ConverterPage() {
                     )}
                   </AnimatePresence>
                 </div>
-                <div className="w-36 px-3 py-3 rounded-lg border border-border-light dark:border-border-dark bg-black/[0.03] dark:bg-white/[0.03] text-right">
+                <div className="w-28 sm:w-36 px-3 py-3 rounded-lg border border-border-light dark:border-border-dark bg-black/[0.03] dark:bg-white/[0.03] text-right">
                   <p className="text-sm font-mono font-bold text-text-primary-light dark:text-text-primary-dark">
                     {toAmount === 0 ? "0" : toAmount >= 1 ? toAmount.toLocaleString("en-US", { maximumFractionDigits: 6 }) : toAmount.toFixed(8)}
                   </p>

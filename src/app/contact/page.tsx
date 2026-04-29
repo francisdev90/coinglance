@@ -179,7 +179,7 @@ export default function ContactPage() {
                 key={label}
                 href={href}
                 aria-label={label}
-                className="flex flex-col items-center gap-1.5 p-4 rounded-xl border border-border-light dark:border-border-dark bg-bg-card-light dark:bg-bg-card-dark text-text-secondary-light dark:text-text-secondary-dark hover:text-accent-gold hover:border-accent-gold/40 transition-all duration-200 min-w-[80px]"
+                className="flex flex-col items-center gap-1.5 p-4 rounded-xl border border-border-light dark:border-border-dark bg-bg-card-light dark:bg-bg-card-dark text-text-secondary-light dark:text-text-secondary-dark hover:text-accent-gold hover:border-accent-gold/40 transition-all duration-200 min-w-[64px] sm:min-w-[80px]"
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-xs font-semibold">{label}</span>
