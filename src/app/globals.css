@@ -2,26 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: ease;
+  transition-duration: 200ms;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
+
+.animate-ticker {
+  animation: ticker-scroll 35s linear infinite;
+}
+
+.ticker-wrapper:hover .animate-ticker {
+  animation-play-state: paused;
+}
+
+@keyframes flash-green {
+  0%   { background-color: transparent; }
+  20%  { background-color: rgba(16, 185, 129, 0.18); }
+  100% { background-color: transparent; }
+}
+
+@keyframes flash-red {
+  0%   { background-color: transparent; }
+  20%  { background-color: rgba(220, 38, 38, 0.18); }
+  100% { background-color: transparent; }
+}
+
+.price-flash-up   { animation: flash-green 600ms ease-out forwards; }
+.price-flash-down { animation: flash-red   600ms ease-out forwards; }
+
+@keyframes milestone-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.milestone-pop { animation: milestone-pop 0.4s ease-in-out; }
