@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Search, ExternalLink, Clock, Tag, Newspaper } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { getNewsItems, timeAgo, type NewsItem } from "@/lib/api/news";
+import { timeAgo, type NewsItem } from "@/lib/api/news";
 import Header from "@/components/layout/Header";
 import MarketTicker from "@/components/layout/MarketTicker";
 import Footer from "@/components/layout/Footer";
@@ -122,8 +122,9 @@ export default function NewsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
 
   useEffect(() => {
-    getNewsItems()
-      .then(setNews)
+    fetch("/api/news")
+      .then((r) => r.json())
+      .then((data: NewsItem[]) => setNews(data))
       .finally(() => setLoading(false));
   }, []);
 
