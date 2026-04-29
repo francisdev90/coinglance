@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- CoinGlance icon — navy background, gold mark -->
+  <!-- Used as source for apple-touch-icon, icon-192, icon-512, icon-maskable-512 -->
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0A1628"/>
+  <!-- Eye outline — scaled to 512x512 (mark occupies ~65% of canvas = ~333px, centered) -->
+  <!-- Origin: (89, 89), scale: 10.4x from 32px design -->
+  <g transform="translate(89 89) scale(10.4375)">
+    <path
+      d="M2 16C5.5 7.5 10.5 3 16 3C21.5 3 26.5 7.5 30 16C26.5 24.5 21.5 29 16 29C10.5 29 5.5 24.5 2 16Z"
+      stroke="#D4A545"
+      stroke-width="2.5"
+      stroke-linejoin="round"
+      fill="none"
+    />
+    <rect x="8.5"  y="19"   width="4" height="5.5" rx="1.5" fill="#D4A545"/>
+    <rect x="14"   y="14.5" width="4" height="10"  rx="1.5" fill="#D4A545"/>
+    <rect x="19.5" y="10.5" width="4" height="14"  rx="1.5" fill="#D4A545"/>
+  </g>
+</svg>

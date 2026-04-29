@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- CoinGlance maskable icon — safe zone: inner 400x400 (centered) -->
+  <!-- Background fills entire 512x512 square as required by maskable spec -->
+  <rect width="512" height="512" fill="#0A1628"/>
+  <!-- Mark in safe zone: ~50% of canvas = ~256px, centered at (128,128) -->
+  <g transform="translate(128 128) scale(8)">
+    <path
+      d="M2 16C5.5 7.5 10.5 3 16 3C21.5 3 26.5 7.5 30 16C26.5 24.5 21.5 29 16 29C10.5 29 5.5 24.5 2 16Z"
+      stroke="#D4A545"
+      stroke-width="2.5"
+      stroke-linejoin="round"
+      fill="none"
+    />
+    <rect x="8.5"  y="19"   width="4" height="5.5" rx="1.5" fill="#D4A545"/>
+    <rect x="14"   y="14.5" width="4" height="10"  rx="1.5" fill="#D4A545"/>
+    <rect x="19.5" y="10.5" width="4" height="14"  rx="1.5" fill="#D4A545"/>
+  </g>
+</svg>
