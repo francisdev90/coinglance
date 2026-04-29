@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ExternalLink, Clock, Tag, Newspaper, RefreshCw } from "lucide-react";
+import { Search, ExternalLink, Clock, Tag, Newspaper } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { timeAgo } from "@/lib/api/news";
@@ -23,7 +23,7 @@ interface NewsItem {
   publishedTs: number;
 }
 
-const SOURCES = ["All", "CoinDesk", "Cointelegraph", "Decrypt", "Bitcoin Magazine", "CryptoSlate", "The Block"];
+const SOURCES = ["All", "CoinDesk", "Cointelegraph", "Decrypt", "Bitcoin Magazine", "CryptoNews"];
 const CATEGORIES = ["All", "Bitcoin", "Ethereum", "DeFi", "NFT", "Regulation", "Altcoins", "Crypto"];
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -130,44 +130,25 @@ function SkeletonCard() {
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [query, setQuery] = useState("");
   const [activeSource, setActiveSource] = useState("All");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const fetchNews = useCallback(async (before?: number) => {
-    const url = before ? `/api/news?before=${before}` : "/api/news";
-    const res = await fetch(url);
+  const fetchNews = useCallback(async () => {
+    const res = await fetch("/api/news");
     if (!res.ok) return [];
-    return res.json() as Promise<NewsItem[]>;
+    const data = await res.json();
+    if (!Array.isArray(data)) return [];
+    return data as NewsItem[];
   }, []);
 
   useEffect(() => {
     fetchNews()
       .then((data) => {
         setNews(data);
-        setHasMore(data.length >= 20);
       })
       .finally(() => setLoading(false));
   }, [fetchNews]);
-
-  const loadMore = async () => {
-    if (loadingMore || !hasMore) return;
-    const oldest = news[news.length - 1]?.publishedTs;
-    if (!oldest) return;
-    setLoadingMore(true);
-    try {
-      const older = await fetchNews(oldest - 1);
-      if (older.length < 10) setHasMore(false);
-      setNews((prev) => {
-        const ids = new Set(prev.map((n) => n.id));
-        return [...prev, ...older.filter((n) => !ids.has(n.id))];
-      });
-    } finally {
-      setLoadingMore(false);
-    }
-  };
 
   const filtered = useMemo(() => {
     let list = news;
@@ -195,7 +176,7 @@ export default function NewsPage() {
             Crypto News
           </h1>
           <p className="mt-1.5 text-sm text-text-secondary-light dark:text-text-secondary-dark">
-            {loading ? "Loading latest headlines…" : `${news.length} articles loaded · Updates every 5 minutes`}
+            {loading ? "Loading latest headlines…" : `${news.length} articles · Live from top crypto sources`}
           </p>
         </div>
 
@@ -275,19 +256,6 @@ export default function NewsPage() {
           }
         </div>
 
-        {/* Load more */}
-        {!loading && filtered.length > 0 && hasMore && (
-          <div className="mt-10 flex justify-center">
-            <button
-              onClick={loadMore}
-              disabled={loadingMore}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl border border-border-light dark:border-border-dark bg-bg-card-light dark:bg-bg-card-dark text-sm font-semibold text-text-secondary-light dark:text-text-secondary-dark hover:text-accent-gold hover:border-accent-gold/40 transition-all disabled:opacity-50"
-            >
-              <RefreshCw className={cn("w-4 h-4", loadingMore && "animate-spin")} />
-              {loadingMore ? "Loading older news…" : "Load older news"}
-            </button>
-          </div>
-        )}
       </div>
 
       <Footer />
